@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dashboard - {{ data['player']['name'] }}</title>
+    </head>
+    <body>
+        <div class="dash-portlet" id="portlet-welcome">
+            Merry Christmas {{ data['player']['name'].upper() }}
+        </div>
+        <div class="dash-portlet" id="portlet-totals">
+            {% for key, value in data.items() %}
+            {% if key != 'player' %}
+            <div class="portlet-total-box">{{ data[key]['solved'] }} / {{ data[key]['total'] }}
+            {% endif %}
+            {% endfor %}
+        </div>
+    </body>
+</html>
