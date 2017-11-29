@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Level {{ data['level']['name'] }}</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/bakerstreet.css') }}">
+    </head>
+    <body onload="open_tab(event, 'family', 'load')">
+        <div class="tab">
+            <button class="tablink active" onclick="open_tab(event, 'family', 'click')">The Family</button>
+            <button class="tablink" onclick="open_tab(event, 'world', 'click')">The World</button>
+            <button class="tablink" onclick="open_tab(event, 'hunt', 'click')">The Hunt</button>      
+        </div>
+
+        <div id="family" class="tabcontent">
+            <h3>The Family</h3>
+        </div>
+        <div id="world" class="tabcontent">
+            <h3>The World</h3>
+        </div>
+        <div id="hunt" class="tabcontent">
+            <h3>The Hunt</h3>
+        </div>
+
+        <script>
+            function open_tab(event, name, type) {
+                var i, tabcontent, tablinks;
+
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for(var i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none"
+                }
+
+                tablinks = document.getElementsByClassName("tablink");
+                for(var i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+
+                document.getElementById(name).style.display = "block";
+
+                if(type == 'load')
+                    tablinks[0].className += " active";
+                else
+                    event.currentTarget.className += " active";
+            }
+        </script>
+    </body>
+</html>

@@ -2,17 +2,35 @@
 <html>
     <head>
         <title>Dashboard - {{ data['player']['name'] }}</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/bakerstreet.css') }}">
     </head>
     <body>
         <div class="dash-portlet" id="portlet-welcome">
             Merry Christmas {{ data['player']['name'].upper() }}
         </div>
         <div class="dash-portlet" id="portlet-totals">
-            {% for key, value in data.items() %}
-            {% if key != 'player' %}
-            <div class="portlet-total-box">{{ data[key]['solved'] }} / {{ data[key]['total'] }}
-            {% endif %}
+            <div class="portlet-title">Totals</div>
+            {% for item in data['totals'] %}
+            <div class="portlet-total-box">
+                <div class="portlet-title">
+                    <a href="/level?level=1">{{ item.title }}</a>
+                </div>
+                <div class="portlet-total">{{ item.stats.solved }} / {{ item.stats.total }}</div>
+            </div>
             {% endfor %}
+        </div>
+        <div class="dash-portlet" id="portlet-level-one">
+            <div class="portlet-title">
+                <a href="/level?level=1">Level 1</a>
+            </div>
+        </div>
+        <div class="dash-portlet" id="portlet-level-two">
+            <div class="portlet-title">Level 2</div>
+
+        </div>
+        <div class="dash-portlet" id="portlet-level-three">
+            <div class="portlet-title">Level 3</div>
+
         </div>
     </body>
 </html>

@@ -21,6 +21,7 @@ class PlayersTable(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
+    code = Column(String)
 
     items = relationship("PlayersItemsTable", back_populates="player")
 

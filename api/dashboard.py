@@ -1,5 +1,5 @@
 from database import get_session
-from database import PlayersTable, PlayersItemsTable, LocationsTable, ItemsTable
+from database import PlayersTable, PlayersItemsTable, LocationsTable
 from sqlalchemy import and_
 
 totals = {
@@ -9,12 +9,15 @@ totals = {
 }
 
 
-def validate(player):
+def validate(player, code):
     # Validate player
     session = get_session()
 
     try:
-        player = session.query(PlayersTable).filter_by(name=player).one()
+        player = session.query(PlayersTable).filter(and_(
+            PlayersTable.name == player, PlayersTable.code == code
+        )).one()
+
         return player
     except Exception:
         return False
