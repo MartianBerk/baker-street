@@ -5,7 +5,10 @@
     </head>
     <body>
         <p>Welcome to Baker Street.</p>
-        <form name="login" action="/dashboard" method="get">
+        {% if data == 'timeout' %}
+        <p>Session timed out. Please re-enter credentials.</p>
+        {% endif %}
+        <form name="login" action="/dashboard" method="post">
             <input type="text" name="name">
             <input type="text" name="code">
             <input type="submit" value="Play">

@@ -35,49 +35,33 @@ class LevelsTable(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
 
-    locations = relationship("LocationsTable", back_populates="level")
-
     def __repr__(self):
         return "<Levels(name={})>".format(self.name)
-
-
-class LocationsTable(Base):
-    __tablename__ = 'locations'
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    level_id = Column(Integer, ForeignKey("levels.id"))
-
-    level = relationship("LevelsTable", back_populates="locations")
-    items = relationship("ItemsTable", back_populates="location")
-
-    def __repr__(self):
-        return "<Locations(name={}, level={}, items={})>".format(self.name, self.level, self.items)
 
 
 class ItemsTable(Base):
     __tablename__ = 'items'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
-    code = Column(String)
     status = Column(String)
-    location_id = Column(Integer, ForeignKey("locations.id"))
+    question = Column(String)
+    answer = Column(String)
+    item_type = Column(String)
+    level_id = Column(Integer, ForeignKey("levels.id"))
 
-    location = relationship("LocationsTable", back_populates="items")
     players_items = relationship("PlayersItemsTable", back_populates="item")
 
     def __repr__(self):
-        return "<Items(name={}, code={}, location={})>".format(self.name, self.code, self.location)
+        return "<Items(question={}, level={}, status={})>".format(self.question, self.level_id, self.status)
 
 
 class PlayersItemsTable(Base):
     __tablename__ = 'players_items'
 
     id = Column(Integer, primary_key=True)
+    bonus = Column(String)
     player_id = Column(Integer, ForeignKey("players.id"))
     level_id = Column(Integer, ForeignKey("levels.id"))
-    location_id = Column(Integer, ForeignKey("locations.id"))
     item_id = Column(Integer, ForeignKey("items.id"))
 
     player = relationship("PlayersTable", back_populates="items")

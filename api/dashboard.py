@@ -1,5 +1,5 @@
 from database import get_session
-from database import PlayersTable, PlayersItemsTable, LocationsTable
+from database import PlayersTable, PlayersItemsTable, ItemsTable
 from sqlalchemy import and_
 
 totals = {
@@ -9,7 +9,7 @@ totals = {
 }
 
 
-def validate(player, code):
+def get_player(player, code):
     # Validate player
     session = get_session()
 
@@ -26,7 +26,7 @@ def validate(player, code):
 def level_one_stats(player_id):
     session = get_session()
 
-    locations = session.query(LocationsTable).filter_by(level_id=1).all()
+    items = session.query(ItemsTable).filter_by(level_id=1).all()
     player_items = session.query(PlayersItemsTable).filter(and_(
         PlayersItemsTable.player_id == player_id, PlayersItemsTable.level_id == 1
     )).all()
@@ -38,9 +38,8 @@ def level_one_stats(player_id):
         'total': totals['level_one']
     }
 
-    for location in locations:
-        data['complete'].extend([item.name for item in location.items if item.status == 'complete'])
-        data['incomplete'].extend([item.name for item in location.items if item.status != 'complete'])
+    data['complete'].extend([item.id for item in items if item.status == 'complete'])
+    data['incomplete'].extend([item.id for item in items if item.status != 'complete'])
 
     for item in player_items:
         data['solved'] += 1
@@ -51,7 +50,7 @@ def level_one_stats(player_id):
 def level_two_stats(player_id):
     session = get_session()
 
-    locations = session.query(LocationsTable).filter_by(level_id=2).all()
+    items = session.query(ItemsTable).filter_by(level_id=2).all()
     player_items = session.query(PlayersItemsTable).filter(and_(
         PlayersItemsTable.player_id == player_id, PlayersItemsTable.level_id == 2
     )).all()
@@ -63,9 +62,8 @@ def level_two_stats(player_id):
         'total': totals['level_two']
     }
 
-    for location in locations:
-        data['complete'].extend([item.name for item in location.items if item.status == 'complete'])
-        data['incomplete'].extend([item.name for item in location.items if item.staus != 'complete'])
+    data['complete'].extend([item.name for item in items if item.status == 'complete'])
+    data['incomplete'].extend([item.name for item in items if item.staus != 'complete'])
 
     for item in player_items:
         data['solved'] += 1
@@ -76,7 +74,7 @@ def level_two_stats(player_id):
 def level_three_stats(player_id):
     session = get_session()
 
-    locations = session.query(LocationsTable).filter_by(level_id=3).all()
+    items = session.query(ItemsTable).filter_by(level_id=3).all()
     player_items = session.query(PlayersItemsTable).filter(and_(
         PlayersItemsTable.player_id == player_id, PlayersItemsTable.level_id == 3
     )).all()
@@ -88,9 +86,8 @@ def level_three_stats(player_id):
         'total': totals['level_three']
     }
 
-    for location in locations:
-        data['complete'].extend([item.name for item in location.items if item.status == 'complete'])
-        data['incomplete'].extend([item.name for item in location.items if item.staus != 'complete'])
+    data['complete'].extend([item.name for item in items if item.status == 'complete'])
+    data['incomplete'].extend([item.name for item in items if item.staus != 'complete'])
 
     for item in player_items:
         data['solved'] += 1

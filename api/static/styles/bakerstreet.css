@@ -69,3 +69,7 @@ div.tab button.active {
     border: 1px solid #292b2d;
     border-top: none;
 }
+
+.answer-field {
+    display: none;
+}

@@ -8,11 +8,28 @@
         <div class="tab">
             <button class="tablink active" onclick="open_tab(event, 'family', 'click')">The Family</button>
             <button class="tablink" onclick="open_tab(event, 'world', 'click')">The World</button>
-            <button class="tablink" onclick="open_tab(event, 'hunt', 'click')">The Hunt</button>      
+            <button class="tablink" onclick="open_tab(event, 'hunt', 'click')">The Hunt</button>
         </div>
-
         <div id="family" class="tabcontent">
             <h3>The Family</h3>
+            <div class="item-complete">
+            {% for item in data['items']['complete'] %}
+                {% if item.item_type == 'family' %}
+                    <p>{{ item.question }} - Solved by {{ item.player.name }}</p>
+                {% endif %}
+            {% endfor %}
+            </div>
+            <div class="item-incomplete">
+            {% for item in data['items']['open'] %}
+                {% if item.item_type == 'family' %}
+                    <p><button id="{{ item.id }}" onclick="open_answer('{{ item.id }}')">{{ item.question }}</button></p>
+                    <form id="answer-{{ item.id }}" class="answer-field" action="/answer?l={{ data.level.id }}&q={{ item.id }}" method="post">
+                        <input type="text" name="a">
+                        <input type="submit" value="Submit">
+                    </form>
+                {% endif %}
+            {% endfor %}
+            </div>
         </div>
         <div id="world" class="tabcontent">
             <h3>The World</h3>
@@ -41,6 +58,17 @@
                     tablinks[0].className += " active";
                 else
                     event.currentTarget.className += " active";
+            }
+
+            function open_answer(question_id) {
+                var i, answers;
+
+                answers = document.getElementsByClassName("answer-field");
+                for(var i = 0; i < answers.length; i++) {
+                    answers[i].style.display = "none"
+                }
+
+                document.getElementById(("answer-"+question_id)).style.display = "block";
             }
         </script>
     </body>

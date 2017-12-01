@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Dashboard - {{ data['player']['name'] }}</title>
+        <title>Dashboard - {{ session['playername'] }}</title>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/bakerstreet.css') }}">
     </head>
     <body>
         <div class="dash-portlet" id="portlet-welcome">
-            Merry Christmas {{ data['player']['name'].upper() }}
+            Merry Christmas {{ session['playername'] }}
         </div>
         <div class="dash-portlet" id="portlet-totals">
             <div class="portlet-title">Totals</div>
