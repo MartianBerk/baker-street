@@ -14,13 +14,16 @@ def get_items(level_id):
     session = get_session()
 
     items = session.query(ItemsTable).filter_by(level_id=level_id).all()
-    players_items = session.query(PlayersItemsTable).filter_by(level_id=level_id).all()
+    players_items = session.query(PlayersItemsTable).filter_by(level_id=level_id)
 
     data = {
         'open': [],
         'complete': []
     }
     for item in items:
+        if item.id in [x.item_id for x in players_items]:
+            continue
+
         answer = json.loads(item.answer)
         data['open'].append({
             "id": item.id,

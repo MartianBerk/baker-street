@@ -1,16 +1,27 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect, url_for, make_response
+from flask_socketio import SocketIO, emit
+
 from dashboard import get_player, level_one_stats, level_two_stats, level_three_stats
 from level import get_items, get_level
 from answer import check
 
 
 app = Flask(__name__)
-app.secret_key = 'Secret Key'
+app.config['SECRET_KEY'] = 'Secret Key'
+socketio = SocketIO(app)
 
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@socketio.on('receive attempt', namespace='/level')
+def broadcast(message):
+    # TODO: Get item, player and solution information, and send back as data
+    data = 'Socket working'
+
+    emit('send attempt', {'answer': {'data': data}})
 
 
 @app.route('/dashboard', methods=["POST"])
@@ -47,7 +58,8 @@ def level():
 
     data = {
         'level': get_level(level),
-        'items': get_items(level)
+        'items': get_items(level),
+        'attempt': request.args.get('attempt')
     }
 
     return render_template('level.html', data=data)
@@ -63,11 +75,10 @@ def answer():
     item = request.args.get('q')
     answer = request.form.get('a')
 
-    if check(item, answer, session['playerid']):
-        return render_template('answer.html', data={"answer": True, "level": level})
-    else:
-        return render_template('answer.html', data={"answer": False, "level": level})
+    attempt = check(item, answer, session['playerid'])
+
+    return redirect(url_for('level', level=level, attempt=True, correct=attempt['correct'], bonus=attempt['bonus']))
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app, host='192.168.0.9')

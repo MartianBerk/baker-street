@@ -9,13 +9,17 @@ def check(item_id, player_answer, player_id):
     item = session.query(ItemsTable).filter_by(id=item_id).one()
     answer = json.loads(item.answer)
 
+    # Check question not already answered
+    if session.query(PlayersItemsTable).filter_by(item_id=item_id).all():
+        return {'correct': False, 'bonus': False, 'message': 'Already answered.'}
+
     player_answer_parts = player_answer.lower().split(',')
     player_answer_parts = [x for x in player_answer.lower().split(' ')]
 
     # Check answer
     correct = False
     if answer['type'] == 'is':
-        if answer['answer'] in player_answer_parts:
+        if answer['answer'] == player_answer.lower():
             correct = True
     elif answer['type'] == 'all':
         if all(x in player_answer_parts for x in answer['answer']):
@@ -42,6 +46,4 @@ def check(item_id, player_answer, player_id):
         session.add(player_item)
         session.commit()
 
-        return True
-    else:
-        return False
+    return {'correct': correct, 'bonus': bonus}
